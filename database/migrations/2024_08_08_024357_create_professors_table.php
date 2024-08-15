@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('Email')->unique();
             $table->string('Senha');
             $table->string('Foto')->nullable(); // Adiciona a coluna Foto
+            $table->string('FotoBack')->nullable(); // Adiciona a coluna Foto
             $table->timestamps();
         });
     }
@@ -30,7 +31,9 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('professores', function (Blueprint $table) {
+            
             $table->dropColumn('Foto'); // Remove a coluna Foto
+            $table->dropColumn('FotoBack');
         });
     }
 };

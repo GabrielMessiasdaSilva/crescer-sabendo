@@ -99,14 +99,19 @@
                     </div>
                 </div>
             </div>
+            @php
+                $professor = Session::get('professor');
+            @endphp
             <div class="w-full h-[250px]">
+                @if ($professor->FotoBack)
+                <img src="{{ asset('storage/' . $professor->FotoBack) }}" class="w-full h-full rounded-tl-lg rounded-tr-lg">
+                @else
                 <img src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg"
                     class="w-full h-full rounded-tl-lg rounded-tr-lg">
+                @endif
             </div>
             <div class="flex flex-col ml-20 -mt-20">
-                @php
-                    $professor = Session::get('professor');
-                @endphp
+
                 <img src="{{ asset('storage/' . $professor->Foto) }}" alt="Foto do Professor"
                     class="w-40 h-40 border-4 border-white rounded-full">
 
@@ -128,14 +133,14 @@
         class="hidden overflow-y-auto overflow-x-hidden bg-gray-800 bg-opacity-75 fixed top-0 right-0 left-0 z-50 justify-center items-center w-screen md:inset-0 h-screen max-h-full">
         <div class="relative p-8 md:w-8/12 sm:10-12 max-h-full mx-auto">
             <!-- Modal content -->
-            <div class="relative bg-customBrown rounded-4xl shadow ">
+            <div class="relative bg-customBrown rounded-4xl shadow">
                 <!-- Modal header -->
                 <div class="flex flex-col items-center justify-center p-4 md:p-5 rounded-t">
-                    <h3 class="text-3xl font-bold text-black ">
+                    <h3 class="text-3xl font-bold text-black">
                         Seus Dados
                     </h3>
                     <button type="button" onclick="toggleModal('modal')"
-                        class="end-2.5 text-gray-400 bg-transparent hover:bg-blue-300 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center ">
+                        class="end-2.5 text-gray-400 bg-transparent hover:bg-blue-300 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
                         <svg class="w-7 h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -145,64 +150,77 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <div id="modal-dados" class="p-8 md:p-10 grid-col-2">
+                <div id="modal-dados" class="p-8 md:p-10 ">
                     <form action="{{ route('professores.update', ['id' => $professor->Id_Professor]) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <div class="mb-4">
-                            <label for="Nome" class="block mb-1 text-lg font-medium text-black">Nome</label>
-                            <input type="text" name="Nome" id="Nm" value="{{ old('Nome', $professor->Nome) }}"
-                                class="bg-white border border-gray-500 text-black text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5"
-                                required />
+                        <div id="modal-dados" class="p-8 md:p-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="mb-4">
+                                <label for="Nome" class="block mb-1 text-lg font-medium text-black">Nome</label>
+                                <input type="text" name="Nome" id="Nm" value="{{ old('Nome', $professor->Nome) }}"
+                                    class="bg-white border border-gray-500 text-black text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5"
+                                    required />
+                            </div>
+                            <div class="mb-4">
+                                <label for="EmailL" class="block mb-1 text-lg font-medium text-black">Email</label>
+                                <input type="email" name="Email" id="emil" value="{{ old('Email', $professor->Email) }}"
+                                    class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5"
+                                    required />
+                            </div>
+                            <div class="mb-4">
+                                <label for="TelefoneL"
+                                    class="block mb-1 text-lg font-medium text-black">Telefone</label>
+                                <input type="text" name="Telefone" id="tel"
+                                    value="{{ old('Telefone', $professor->Telefone) }}"
+                                    class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5"
+                                    required />
+                            </div>
+                            <div class="mb-4">
+                                <label for="FormacaoL"
+                                    class="block mb-1 text-lg font-medium text-black">Formação</label>
+                                <input type="text" name="Formacao" id="formç"
+                                    value="{{ old('Formacao', $professor->Formacao) }}"
+                                    class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5"
+                                    required />
+                            </div>
+                            <div class="mb-4">
+                                <label for="NascimentoL" class="block mb-1 text-lg font-medium text-black">Data de
+                                    Nascimento</label>
+                                <input type="text" name="Nascimento" id="nasc"
+                                    value="{{ old('Nascimento', $professor->Nascimento) }}"
+                                    class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5"
+                                    required />
+                            </div>
+                            <div class="mb-4">
+                                @if($professor->Foto)
+                                    <img src="{{ asset('storage/' . $professor->Foto) }}" alt="Foto do Professor"
+                                        class="w-40 h-40 border-4 border-white rounded-full">
+                                @endif
+                                <label for="Foto" class="block mb-1 text-lg font-medium text-black">Foto</label>
+                                <input type="file" name="Foto" id="foto"
+                                    class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5" />
+                            </div>
+                            <div class="mb-4">
+                                @if($professor->FotoBack)
+                                    <img src="{{ asset('storage/' . $professor->FotoBack) }}" alt="Foto do Professor"
+                                        class="w-40 h-40 border-4 border-white rounded-full">
+                                @endif
+                                <label for="Foto" class="block mb-1 text-lg font-medium text-black">Foto</label>
+                                <input type="file" name="FotoBack" id="foto"
+                                    class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5" />
+                            </div>
+                            <button type="submit"
+                                class="col-span-2 w-full text-white bg-customRed hover:bg-customRedDark focus:ring-4 focus:outline-none focus:ring-customRedDark font-medium rounded-lg text-lg px-5 py-2.5 text-center">
+                                Atualizar
+                            </button>
                         </div>
-                        <div class="mb-4">
-                            <label for="EmailL" class="block mb-1 text-lg font-medium text-black">Email</label>
-                            <input type="email" name="Email" id="emil" value="{{ old('Email', $professor->Email) }}"
-                                class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5 "
-                                required />
-                        </div>
-                        <div class="mb-4">
-                            <label for="TelefoneL" class="block mb-1 text-lg font-medium text-black">Telefone</label>
-                            <input type="text" name="Telefone" id="tel"
-                                value="{{ old('Telefone', $professor->Telefone) }}"
-                                class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5 "
-                                required />
-                        </div>
-                        <div class="mb-4">
-                            <label for="FormacaoL" class="block mb-1 text-lg font-medium text-black">Formação</label>
-                            <input type="text" name="Formacao" id="formç"
-                                value="{{ old('Formacao', $professor->Formacao) }}"
-                                class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5 "
-                                required />
-                        </div>
-                        <div class="mb-4">
-                            <label for="NascimentoL" class="block mb-1 text-lg font-medium text-black">Data de
-                                Nascimento</label>
-                            <input type="text" name="Nascimento" id="nasc"
-                                value="{{ old('Nascimento', $professor->Nascimento) }}"
-                                class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5 "
-                                required />
-                        </div>
-                        <div class="mb-4">
-                            @if($professor->Foto)
-                                <img src="{{ asset('storage/' . $professor->Foto) }}" alt="Foto do Professor"
-                                    class="w-40 h-40 border-4 border-white rounded-full">
-                            @endif
-                            <label for="Foto" class="block mb-1 text-lg font-medium text-black">Foto</label>
-                            <input type="file" name="Foto" id="foto"
-                                class="bg-gray-50 border border-gray-500 text-gray-900 text-lg rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5" />
-                        </div>
-                        <button type="submit"
-                            class="w-full text-white bg-customRed hover:bg-customRedDark focus:ring-4 focus:outline-none focus:ring-customRedDark font-medium rounded-lg text-lg px-5 py-2.5 text-center">
-                            Atualizar
-                        </button>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
+
     <!--END Main modal -->
 
     <!--Data teacher-->
@@ -223,207 +241,57 @@
     <!--End Data teacher-->
 
     <!--My Courses-->
-    <div class="flex flex-wrap justify-between mx-5">
-        <!-- Meus Cursos -->
-        <div id="Pt1" class="w-full lg:w-7/12 border-2 border-black rounded-4xl mx-7 md:mx-14 my-10">
-            <div class="my-5 mx-5 md:mx-10 max-w-full flex justify-between">
-                <p class="font-itim text-black text-xl md:text-2xl">Meus Cursos</p>
-                <a class="font-itim underline underline-offset-2 text-sm md:text-lg">Ver todos</a>
+
+    <section class="bg-gray-100 py-10 mx-10">
+        <div class="container mx-auto flex flex-col lg:flex-row lg:space-x-8">
+            <!-- Cursos Ofertados -->
+            <div class="w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-lg">
+                <h4 class="text-xl font-bold mb-4">Meus Cursos</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                    <div class="bg-gray-300 p-4 rounded-lg">
+                        <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
+                            class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <div class="bg-gray-300 p-4 rounded-lg">
+                        <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
+                            class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <div class="bg-gray-300 p-4 rounded-lg">
+                        <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
+                            class="w-full h-full object-cover rounded-xl">
+                    </div>
+                </div>
             </div>
-            <div id="gridCourses" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-8">
-                <!-- Content -->
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
 
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-4 my-5">
-                    <div class="border-2 rounded-xl border-black w-40 sm:w-52 h-26 flex justify-center align-center">
-                        <div class="flex flex-col justify-center w-32 sm:w-40 h-26">
-                            <img src="{{ asset('images/icons/ImageIconBrown.png') }}" alt=""
-                                class="w-full h-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-                <!-- Repetir o conteúdo conforme necessário -->
+            <!-- Professores -->
+            <div class="w-full lg:w-1/3 bg-white p-6 rounded-lg shadow-lg mt-6 lg:mt-0">
+                <h4 class="text-xl font-bold mb-4">ONGs</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-center">
+                        <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Professor"
+                            class="w-10 h-10 rounded-full">
+                        <span class="ml-4">Nome XXXXXXXXX</span>
+                    </li>
+                    <li class="flex items-center">
+                        <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Professor"
+                            class="w-10 h-10 rounded-full">
+                        <span class="ml-4">Nome XXXXXXXXX</span>
+                    </li>
+                    <li class="flex items-center">
+                        <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Professor"
+                            class="w-10 h-10 rounded-full">
+                        <span class="ml-4">Nome XXXXXXXXX</span>
+                    </li>
+                    <li class="flex items-center">
+                        <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Professor"
+                            class="w-10 h-10 rounded-full">
+                        <span class="ml-4">Nome XXXXXXXXX</span>
+                    </li>
+                </ul>
             </div>
         </div>
-        <!-- Fim Meus Cursos -->
-
-        <!-- ONGs -->
-        <div id="Pt2" class="w-full lg:w-3/12 border-2 border-black rounded-4xl mx-7 md:mx-14 my-10">
-            <div class="my-5 mx-5 md:mx-10 max-w-full flex justify-center">
-                <p class="font-itim text-black text-2xl md:text-4xl">Ongs</p>
-            </div>
-            <div id="gridCourses" class="flex flex-col justify-center items-center my-8">
-                <!-- Content -->
-                <label class="relative flex items-center mb-4">
-                    <span class="mr-2">
-                        <div class="border-2 rounded-full border-black w-10 sm:w-12 flex justify-center">
-                            <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Logo"
-                                class="rounded-full w-8 sm:w-10 h-8 sm:h-10 object-cover">
-                        </div>
-                    </span>
-                    <p class="font-itim text-black text-sm sm:text-lg">Nome XXXXXXXXXXXXXX</p>
-                </label>
-                <!-- Repetir o conteúdo conforme necessário -->
-
-                <label class="relative flex items-center mb-4">
-                    <span class="mr-2">
-                        <div class="border-2 rounded-full border-black w-10 sm:w-12 flex justify-center">
-                            <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Logo"
-                                class="rounded-full w-8 sm:w-10 h-8 sm:h-10 object-cover">
-                        </div>
-                    </span>
-                    <p class="font-itim text-black text-sm sm:text-lg">Nome XXXXXXXXXXXXXX</p>
-                </label>
-
-                <label class="relative flex items-center mb-4">
-                    <span class="mr-2">
-                        <div class="border-2 rounded-full border-black w-10 sm:w-12 flex justify-center">
-                            <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Logo"
-                                class="rounded-full w-8 sm:w-10 h-8 sm:h-10 object-cover">
-                        </div>
-                    </span>
-                    <p class="font-itim text-black text-sm sm:text-lg">Nome XXXXXXXXXXXXXX</p>
-                </label>
-
-                <label class="relative flex items-center mb-4">
-                    <span class="mr-2">
-                        <div class="border-2 rounded-full border-black w-10 sm:w-12 flex justify-center">
-                            <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Logo"
-                                class="rounded-full w-8 sm:w-10 h-8 sm:h-10 object-cover">
-                        </div>
-                    </span>
-                    <p class="font-itim text-black text-sm sm:text-lg">Nome XXXXXXXXXXXXXX</p>
-                </label>
-
-                <label class="relative flex items-center mb-4">
-                    <span class="mr-2">
-                        <div class="border-2 rounded-full border-black w-10 sm:w-12 flex justify-center">
-                            <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Logo"
-                                class="rounded-full w-8 sm:w-10 h-8 sm:h-10 object-cover">
-                        </div>
-                    </span>
-                    <p class="font-itim text-black text-sm sm:text-lg">Nome XXXXXXXXXXXXXX</p>
-                </label>
-
-                <label class="relative flex items-center mb-4">
-                    <span class="mr-2">
-                        <div class="border-2 rounded-full border-black w-10 sm:w-12 flex justify-center">
-                            <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Logo"
-                                class="rounded-full w-8 sm:w-10 h-8 sm:h-10 object-cover">
-                        </div>
-                    </span>
-                    <p class="font-itim text-black text-sm sm:text-lg">Nome XXXXXXXXXXXXXX</p>
-                </label>
-
-                <label class="relative flex items-center mb-4">
-                    <span class="mr-2">
-                        <div class="border-2 rounded-full border-black w-10 sm:w-12 flex justify-center">
-                            <img src="{{ asset('images/icons/ImageIcon.png') }}" alt="Logo"
-                                class="rounded-full w-8 sm:w-10 h-8 sm:h-10 object-cover">
-                        </div>
-                    </span>
-                    <p class="font-itim text-black text-sm sm:text-lg">Nome XXXXXXXXXXXXXX</p>
-                </label>
-            </div>
-        </div>
-        <!-- Fim ONGs -->
+    </section>
+    <!-- Fim ONGs -->
     </div>
 
     <!-- END ONGS NAMES -->

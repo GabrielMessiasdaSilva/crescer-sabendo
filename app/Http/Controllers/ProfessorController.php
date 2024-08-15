@@ -49,8 +49,9 @@ class ProfessorController
         ]);
 
         // Retorna os erros de validação se houver
-        if ($validator->fails()) return redirect()->back()->withErrors($validator)->withInput();
-        
+        if ($validator->fails())
+            return redirect()->back()->withErrors($validator)->withInput();
+
 
         // Criação do objeto Professor
         $professor = new Professor();
@@ -66,6 +67,7 @@ class ProfessorController
         if ($req->hasFile('Foto') && $req->file('Foto')->isValid()) {
             $professor->Foto = $req->file('Foto')->store('fotos', 'public');
         }
+
 
         // Verificação de correspondência das senhas
         if ($c_senha !== $senha) {
@@ -88,43 +90,52 @@ class ProfessorController
     }
 
     public function update(Request $request, $id)
-{
-    // Obtenha o ID do professor corretamente
-    $id = $request->route('id');
-    
-    Log::info('Método update foi chamado.');
+    {
+        // Obtenha o ID do professor corretamente
+        $id = $request->route('id');
 
-    $validated = $request->validate([
-        'Nome' => 'required|string|max:255',
-        'Email' => 'required|email|max:255',
-        'Telefone' => 'required|string|max:15',
-        'Formacao' => 'required|string|max:255',
-        'Nascimento' => 'required|date',
-        'Foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+        Log::info('Método update foi chamado.');
 
-    // Encontre o professor usando a coluna correta
-    $professor = Professor::where('Id_Professor', $id)->firstOrFail();
+        $validated = $request->validate([
+            'Nome' => 'required|string|max:255',
+            'Email' => 'required|email|max:255',
+            'Telefone' => 'required|string|max:15',
+            'Formacao' => 'required|string|max:255',
+            'Nascimento' => 'required|date',
+            'Foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'FotoBack' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    // Atualize os dados
-    $professor->update($validated);
+        // Encontre o professor usando a coluna correta
+        $professor = Professor::where('Id_Professor', $id)->firstOrFail();
 
-    // Verifique se uma nova foto foi enviada e atualize-a
-    if ($request->hasFile('Foto')) {
-        if ($professor->Foto) {
-            Storage::disk('public')->delete($professor->Foto);
+        // Atualize os dados
+        $professor->update($validated);
+
+        // Verifique se uma nova foto foi enviada e atualize-a
+        if ($request->hasFile('Foto')) {
+            if ($professor->Foto) {
+                Storage::disk('public')->delete($professor->Foto);
+            }
+            $path = $request->file('Foto')->store('fotos_professores', 'public');
+            $professor->Foto = $path;
         }
-        $path = $request->file('Foto')->store('fotos_professores', 'public');
-        $professor->Foto = $path;
-    }
 
-    // Salve as mudanças
-    $professor->save();
+        if ($request->hasFile('FotoBack')) {
+            if ($professor->FotoBack) {
+                Storage::disk('public')->delete($professor->FotoBack);
+            }
+            $path = $request->file('FotoBack')->store('fotos_professores', 'public');
+            $professor->FotoBack = $path;
+        }
 
-    // Redirecione para a página de edição do professor
-    Session::put('professor', $professor);
+        // Salve as mudanças
+        $professor->save();
+
+        // Redirecione para a página de edição do professor
+        Session::put('professor', $professor);
         return redirect('/prof/account');
-}
+    }
 
 
 }

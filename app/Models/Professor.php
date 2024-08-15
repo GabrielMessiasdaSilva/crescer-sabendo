@@ -21,15 +21,8 @@ class Professor extends Model
         'Email',
         'Senha',
         'Foto',
+        'FotoBack',
     ];
-        public function getCapaUrlAttribute(){
-         //Verifica se o atributo 'capa' existe
-         if($this->Foto){
-              //Retorna a URL completa da imagem da capa usando a função 'asset'
-         // 'storage/' é o caminho onde as imagens são armazenadas no Laravel
-             return asset('storage/' . $this->fotos);
-         }
-         // Retorna null se não houver uma imagem de capa associada
-         return null;
-     }
+    
+
 }
