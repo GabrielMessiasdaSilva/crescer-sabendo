@@ -6,6 +6,8 @@ use App\Http\Controllers\OngController;
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\LoginController;
 
+use App\Http\Controllers\CursoController;
+
 
 // Paginas padrão
 Route::get('/', function () {
@@ -49,6 +51,14 @@ Route::get('/ong/volunteer', function () {
     return view('user/ong/volunteer');
 })->middleware(\App\Http\Middleware\Auth::class);
 
+// Página para listar todos os cursos
+Route::get('/ong/courses', [CursoController::class, 'index'])->name('courses.index');
+Route::get('/ong/courses/create', [CursoController::class, 'create'])->name('courses.create');
+Route::post('/ong/courses', [CursoController::class, 'store'])->name('courses.store');
+Route::get('/ong/courses/{id}', [CursoController::class, 'show'])->name('courses.show');
+Route::get('/ong/courses/{id}/edit', [CursoController::class, 'edit'])->name('courses.edit');
+Route::put('/ong/courses/{id}', [CursoController::class, 'update'])->name('courses.update');
+Route::delete('/ong/courses/{id}', [CursoController::class, 'destroy'])->name('courses.destroy');
 
 // Aluno
 Route::get('/aluno/signup', function () {

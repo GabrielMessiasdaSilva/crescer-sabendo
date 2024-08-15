@@ -1,35 +1,29 @@
 <?php
+// database/migrations/xxxx_xx_xx_create_cursos_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateCursosTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('cursos', function (Blueprint $table) {
-            $table->increments('Id_Curso');
+            $table->id('Id_Curso');
             $table->string('Nome');
-            $table->text('Sobre')->nullable();
-            $table->time('Horario')->nullable();
-            $table->string('Dias')->nullable();
-            $table->unsignedInteger('Id_Professor')->nullable();
-            $table->binary('Foto')->nullable();
-            $table->text('Itens_Aula')->nullable();
-            $table->foreign('Id_Professor')->references('Id_Professor')->on('professores');
+            $table->string('Duracao');
+            $table->string('Professor');
+            $table->string('Itens_Aula');
+            $table->text('Sobre');
+            $table->string('Dias');
+            $table->string('Foto')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('cursos');
     }
-};
+}

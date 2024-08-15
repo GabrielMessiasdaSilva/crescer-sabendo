@@ -5,61 +5,94 @@ namespace App\Http\Controllers;
 use App\Models\Curso;
 use Illuminate\Http\Request;
 
-class CursoController
+class CursoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $cursos = Curso::all(); // Fetch all courses
+        return view('user/ong/courses', compact('cursos')); // Pass courses to the view
     }
+    
+    
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'Nome' => 'required|string|max:255',
+            'Duracao' => 'required|string|max:255',
+            'Id_Professor' => 'required|string|max:255',
+            'Itens_Aula' => 'required|string|max:255',
+            'Sobre' => 'required|string|max:255',
+            'Dias' => 'required|string|max:255',
+            'Foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $curso = new Curso();
+        $curso->Nome = $request->Nome;
+        $curso->Duracao = $request->Duracao;
+        $curso->Professor = $request->Professor;
+        $curso->Itens_Aula = $request->Itens_Aula;
+        $curso->Sobre = $request->Sobre;
+        $curso->Dias = $request->Dias;
+
+        if ($request->hasFile('Foto')) {
+            $file = $request->file('Foto');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public', $filename);
+            $curso->Foto = $filename;
+        }
+
+        $curso->save();
+
+        return redirect()->route('cursos.index')->with('success', 'Curso criado com sucesso.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Curso $curso)
+    public function show($id)
     {
-        //
+        $curso = Curso::findOrFail($id);
+        return response()->json($curso);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Curso $curso)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'Nome' => 'required|string|max:255',
+            'Duracao' => 'required|string|max:255',
+            'Professor' => 'required|string|max:255',
+            'Itens_Aula' => 'required|string|max:255',
+            'Sobre' => 'required|string|max:255',
+            'Dias' => 'required|string|max:255',
+            'Foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $curso = Curso::findOrFail($id);
+        $curso->Nome = $request->Nome;
+        $curso->Duracao = $request->Duracao;
+        $curso->Professor = $request->Professor;
+        $curso->Itens_Aula = $request->Itens_Aula;
+        $curso->Sobre = $request->Sobre;
+        $curso->Dias = $request->Dias;
+
+        if ($request->hasFile('Foto')) {
+            $file = $request->file('Foto');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public', $filename);
+            $curso->Foto = $filename;
+        }
+
+        $curso->save();
+
+        return redirect()->route('cursos.index')->with('success', 'Curso atualizado com sucesso.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Curso $curso)
+    public function destroy($id)
     {
-        //
-    }
+        $curso = Curso::findOrFail($id);
+        if ($curso->Foto) {
+            Storage::delete('public/' . $curso->Foto);
+        }
+        $curso->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Curso $curso)
-    {
-        //
+        return redirect()->route('cursos.index')->with('success', 'Curso excluído com sucesso.');
     }
 }
