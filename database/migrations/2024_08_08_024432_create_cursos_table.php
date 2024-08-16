@@ -20,6 +20,7 @@ class CreateCursosTable extends Migration
             $table->string('Foto')->nullable();
             $table->timestamps();
         });
+        
     }
 
     public function down()

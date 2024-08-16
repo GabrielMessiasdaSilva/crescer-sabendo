@@ -46,6 +46,7 @@
             <a href="/" class="block text-customBlue text-lg font-itim py-2 hover:text-customRed">Matriculas</a>
         </div>
     </header>
+    
     @if ($cursos->isEmpty())
         <p>Nenhum curso encontrado.</p>
     @else
@@ -54,7 +55,7 @@
         @endforeach
     @endif
   
-    
+
     <div class="flex flex-col w-full h-full sm:w-full sm:h-full mb-20">
         <div id="gridCourses" class="grid grid-cols-1 md:grid-cols-4 my-3">
             <!-- Course Cards -->

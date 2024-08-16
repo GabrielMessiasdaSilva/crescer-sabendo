@@ -17,6 +17,7 @@ class Curso extends Model
     protected $primaryKey = 'Id_Curso';
     protected $foreignKey = 'Id_Professor';
 
+    
     protected $fillable = [
         'Id_Curso', 'Nome', 'Duracao', 'Id_Professor', 'Itens_Aula', 'Sobre', 'Dias', 'Foto'
     ];

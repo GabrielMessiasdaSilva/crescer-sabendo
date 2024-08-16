@@ -38,6 +38,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/ong/signup', function () {
     return view('user/ong/signUp');
 });
+
 Route::get('/ong/account', function () {
     return view('user/ong/account');
 });//->middleware(\App\Http\Middleware\Auth::class);

@@ -34,6 +34,7 @@ class CursoController extends Controller
         $curso->Itens_Aula = $request->Itens_Aula;
         $curso->Sobre = $request->Sobre;
         $curso->Dias = $request->Dias;
+        
 
         if ($request->hasFile('Foto')) {
             $file = $request->file('Foto');
