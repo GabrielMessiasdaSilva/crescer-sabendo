@@ -53,7 +53,8 @@
             <p>{{ $curso->Nome }}</p>
         @endforeach
     @endif
-
+  
+    
     <div class="flex flex-col w-full h-full sm:w-full sm:h-full mb-20">
         <div id="gridCourses" class="grid grid-cols-1 md:grid-cols-4 my-3">
             <!-- Course Cards -->
