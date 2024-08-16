@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\OngController;
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\CursoController;
 
 
 // Paginas padrão
@@ -31,7 +32,6 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 
-
 // Ong
 Route::get('/ong/signup', function () {
     return view('user/ong/signUp');
@@ -48,6 +48,12 @@ Route::get('/ong/mural', function () {
 Route::get('/ong/volunteer', function () {
     return view('user/ong/volunteer');
 })->middleware(\App\Http\Middleware\Auth::class);
+
+//Curso CRUD
+Route::get('/ong/courses', [CursoController::class, 'index'])->name('cursos.index');
+Route::resource('cursos', CursoController::class);
+Route::post('/cursos', [CursoController::class, 'store'])->name('cursos.store');
+Route::delete('/cursos/{id}', [CursoController::class, 'destroy'])->name('cursos.destroy');
 
 
 // Aluno
